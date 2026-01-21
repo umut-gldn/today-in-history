@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Tarihte bugün yaşanan önemli olayları, doğumları ve vefatları keşfedin"
+    />
+    <meta
+      name="keywords"
+      content="tarih, tarihte bugün, tarihi olaylar, doğumlar, vefatlar"
+    />
+    <meta name="author" content="Tarihte Bugün" />
+    <title>Tarihte Bugün - Tarihi Olaylar</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header>
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          aria-label="Temayı değiştir"
+        >
+          <span id="themeIcon">🌙</span>
+        </button>
+        <h1>📅 Tarihte Bugün</h1>
+        <div class="date-info" id="currentDate"></div>
+      </header>
+
+      <!-- Statistics -->
+      <div id="stats" class="stats"></div>
+
+      <!-- Filters -->
+      <div id="filters" class="filter-buttons"></div>
+
+      <!-- Loading State -->
+      <div id="loading" class="loading">Yükleniyor...</div>
+
+      <!-- Error State -->
+      <div id="error" class="error hidden"></div>
+
+      <!-- Timeline -->
+      <div id="timeline" class="timeline"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+  </body>
+</html>
