@@ -243,6 +243,7 @@ h1 {
   margin-left: 10px;
 }
 
+/* Specific event types - API'den gelen Durum değerlerine göre */
 .event-type.Olay {
   background: var(--color-event-olay-bg);
   color: var(--color-event-olay-text);
@@ -256,6 +257,13 @@ h1 {
 .event-type.Ölüm {
   background: var(--color-event-death-bg);
   color: var(--color-event-death-text);
+}
+
+/* Fallback for any other event types */
+.event-type:not(.Olay):not(.Doğum):not(.Ölüm) {
+  background: var(--color-card-bg);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .event-description {

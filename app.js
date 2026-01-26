@@ -12,7 +12,6 @@ const CONFIG = {
   CACHE_DURATION: 60 * 60 * 1000, // 60 minutes
   RATE_LIMIT_WINDOW: 60 * 1000, // 1 minute
   MAX_REQUESTS: 20,
-  EVENT_TYPES: ["Tümü", "Olay", "Doğum", "Ölüm"],
   MONTHS: [
     "Ocak",
     "Şubat",
@@ -85,6 +84,21 @@ const Utils = {
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
+  },
+
+  /**
+   * Extract unique event types from events array
+   * @param {Array} events - Array of event objects
+   * @returns {Array} - Array of unique event types with 'Tümü' prepended
+   */
+  getEventTypes(events) {
+    const types = new Set();
+    events.forEach((event) => {
+      if (event.Durum) {
+        types.add(event.Durum);
+      }
+    });
+    return ["Tümü", ...Array.from(types).sort()];
   },
 };
 
@@ -284,45 +298,60 @@ const UIManager = {
   },
 
   displayStats(events) {
-    const stats = events.reduce(
-      (acc, event) => {
-        if (event.Durum in acc) acc[event.Durum]++;
-        return acc;
-      },
-      { Olay: 0, Doğum: 0, Ölüm: 0 },
-    );
+    // Get unique event types dynamically
+    const eventTypes = Utils.getEventTypes(events);
+
+    // Count events by type (excluding 'Tümü')
+    const stats = {};
+    eventTypes
+      .filter((type) => type !== "Tümü")
+      .forEach((type) => {
+        stats[type] = 0;
+      });
+
+    events.forEach((event) => {
+      if (event.Durum && stats.hasOwnProperty(event.Durum)) {
+        stats[event.Durum]++;
+      }
+    });
+
+    // Build stats HTML
+    const statsCards = Object.entries(stats)
+      .map(
+        ([type, count]) => `
+                <div class="stat-card">
+                    <span class="stat-number">${count}</span>
+                    <span class="stat-label">${type}</span>
+                </div>
+            `,
+      )
+      .join("");
 
     const statsHTML = `
             <div class="stat-card">
                 <span class="stat-number">${events.length}</span>
                 <span class="stat-label">Toplam Olay</span>
             </div>
-            <div class="stat-card">
-                <span class="stat-number">${stats.Olay}</span>
-                <span class="stat-label">Tarihî Olay</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">${stats.Doğum}</span>
-                <span class="stat-label">Doğum</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">${stats.Ölüm}</span>
-                <span class="stat-label">Vefat</span>
-            </div>
+            ${statsCards}
         `;
 
     elements.stats.innerHTML = statsHTML;
   },
 
   displayFilters() {
-    const filtersHTML = CONFIG.EVENT_TYPES.map(
-      (filter) => `
+    // Get dynamic event types
+    const eventTypes = Utils.getEventTypes(state.allEvents);
+
+    const filtersHTML = eventTypes
+      .map(
+        (filter) => `
                 <button class="filter-btn ${filter === state.currentFilter ? "active" : ""}" 
                         data-filter="${filter}">
                     ${filter}
                 </button>
             `,
-    ).join("");
+      )
+      .join("");
 
     elements.filters.innerHTML = filtersHTML;
     this.attachFilterListeners();
