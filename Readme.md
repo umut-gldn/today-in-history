@@ -92,5 +92,3 @@ MIT License - Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 - [Zumbo API](https://api.zumbo.net/) - Veri sağlayıcı
 
 ---
-
-⭐ Beğendiyseniz yıldız vermeyi unutmayın!
